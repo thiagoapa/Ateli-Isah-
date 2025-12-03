@@ -3,7 +3,9 @@ package atelie.service;
 import atelie.model.Cliente;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Service; //novo 2/12 12am
 
+@Service
 public class ClienteService {
     private List<Cliente> clientes = new ArrayList<>();
     private int nextId = 1;

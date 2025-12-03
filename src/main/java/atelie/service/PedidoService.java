@@ -4,12 +4,16 @@ import atelie.model.Cliente;
 import atelie.model.Pedido;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PedidoService {
     private List<Pedido> pedidos = new ArrayList<>();
     private ClienteService clienteService;
     private int nextId = 1001;
 
+    @Autowired
     public PedidoService(ClienteService clienteService) {
         this.clienteService = clienteService;
     }
@@ -28,11 +32,36 @@ public class PedidoService {
         }
     }
 
+    // ========== RF003 - ATUALIZAR STATUS DOS PEDIDOS ==========
+    public boolean atualizarStatusPedido(int idPedido, String novoStatus) {
+        for (Pedido pedido : pedidos) {
+            if (pedido.getIdPedido() == idPedido) {
+                String statusAnterior = pedido.getStatusProducao();
+                pedido.setStatusProducao(novoStatus);
+                System.out.println("✅ Pedido " + idPedido +
+                        " atualizado: " + statusAnterior +
+                        " → " + novoStatus);
+                return true;
+            }
+        }
+        System.out.println("❌ Pedido com ID " + idPedido + " não encontrado");
+        return false;
+    }
+
     public List<Pedido> listarPedidos() {
         return this.pedidos;
     }
 
     public boolean existemPedidos() {
         return !pedidos.isEmpty();
+    }
+
+    public Pedido buscarPedidoPorId(int id) {
+        for (Pedido p : pedidos) {
+            if (p.getIdPedido() == id) {
+                return p;
+            }
+        }
+        return null;
     }
 }
